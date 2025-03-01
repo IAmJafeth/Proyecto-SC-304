@@ -9,6 +9,7 @@ package proyecto.sc.pkg304;
  * @author jgarr
  */
 public enum TipoTramite {
+     // Enum utilizado como atributo en la clase Tiquete
     DEPOSITOS("Depósitos"),
     RETIROS("Retiros"),
     CAMBIO_DIVISAS("Cambio de Divisas");

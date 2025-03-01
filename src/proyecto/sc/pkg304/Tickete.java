@@ -1,15 +1,31 @@
 package proyecto.sc.pkg304;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 public class Tickete {
     private String nombre;
     private int id;
     private int edad;
-    private Date horaCreación;
-    private Date horaAtencion;
+    private LocalDateTime horaCreación;
+    private LocalDateTime horaAtencion;
     private TipoTramite tramite;
     private TipoTickete tipo;
+
+    public Tickete(String nombre, int id, int edad, TipoTramite tramite, TipoTickete tipo) {
+        this.nombre = nombre;
+        this.id = id;
+        this.edad = edad;
+        this.tramite = tramite;
+        this.tipo = tipo;
+        
+        this.horaCreación = LocalDateTime.now();
+        this.horaAtencion = LocalDateTime.MIN; // Esto representa que la fecha y hora no se ha asignado.
+    }
+    
+    public boolean isCompleted(){
+        return horaAtencion != LocalDateTime.MIN;
+    }
 
     public String getNombre() {
         return nombre;
@@ -35,19 +51,19 @@ public class Tickete {
         this.edad = edad;
     }
 
-    public Date getHoraCreación() {
+    public LocalDateTime getHoraCreación() {
         return horaCreación;
     }
 
-    public void setHoraCreación(Date horaCreación) {
+    public void setHoraCreación(LocalDateTime horaCreación) {
         this.horaCreación = horaCreación;
     }
 
-    public Date getHoraAtencion() {
+    public LocalDateTime getHoraAtencion() {
         return horaAtencion;
     }
 
-    public void setHoraAtencion(Date horaAtencion) {
+    public void setHoraAtencion(LocalDateTime horaAtencion) {
         this.horaAtencion = horaAtencion;
     }
 
@@ -66,7 +82,5 @@ public class Tickete {
     public void setTipo(TipoTickete tipo) {
         this.tipo = tipo;
     }
-    
-    
-    
+           
 }
