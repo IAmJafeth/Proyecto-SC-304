@@ -9,5 +9,18 @@ package proyecto.sc.pkg304;
  * @author jgarr
  */
 public enum TipoTickete {
+    P("Preferencial"),
+    A("Un Solo Trámite"),
+    B("Dos o más trámites");
+    
+    private final String displayName;
+
+    TipoTickete(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
     
 }
