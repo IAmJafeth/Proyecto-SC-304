@@ -3,16 +3,16 @@ package proyecto.sc.pkg304;
 import java.time.LocalDateTime;
 
 
-public class Tickete {
+public class Tiquete {
     private String nombre;
     private int id;
     private int edad;
     private LocalDateTime horaCreación;
     private LocalDateTime horaAtencion;
     private TipoTramite tramite;
-    private TipoTickete tipo;
+    private TipoTiquete tipo;
 
-    public Tickete(String nombre, int id, int edad, TipoTramite tramite, TipoTickete tipo) {
+    public Tiquete(String nombre, int id, int edad, TipoTramite tramite, TipoTiquete tipo) {
         this.nombre = nombre;
         this.id = id;
         this.edad = edad;
@@ -75,11 +75,11 @@ public class Tickete {
         this.tramite = tramite;
     }
 
-    public TipoTickete getTipo() {
+    public TipoTiquete getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoTickete tipo) {
+    public void setTipo(TipoTiquete tipo) {
         this.tipo = tipo;
     }
            

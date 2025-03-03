@@ -8,7 +8,7 @@ package proyecto.sc.pkg304;
  *
  * @author jgarr
  */
-public enum TipoTickete {
+public enum TipoTiquete {
     // Enum utilizado como atributo en la clase Tiquete
     P("Preferencial"),
     A("Un Solo Trámite"),
@@ -16,7 +16,7 @@ public enum TipoTickete {
     
     private final String displayName;
 
-    TipoTickete(String displayName) {
+    TipoTiquete(String displayName) {
         this.displayName = displayName;
     }
 
