@@ -16,11 +16,11 @@ public class Nodo {
         this.tiqete = tiquete;
     }
 
-    public Tiquete getNombre() {
+    public Tiquete geTiquete() {
         return tiqete;
     }
 
-    public void setNombre(Tiquete tiquete) {
+    public void setTiquete(Tiquete tiquete) {
         this.tiqete = tiquete;
     }
 
