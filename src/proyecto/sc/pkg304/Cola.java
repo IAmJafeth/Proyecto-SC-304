@@ -1,7 +1,5 @@
 package proyecto.sc.pkg304;
 
-import java.io.Serializable;
-
 /**
  *
  * @author jafeth.garro
