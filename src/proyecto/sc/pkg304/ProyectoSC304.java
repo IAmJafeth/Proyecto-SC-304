@@ -4,6 +4,8 @@
  */
 package proyecto.sc.pkg304;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author jgarr
@@ -14,26 +16,19 @@ public class ProyectoSC304 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        String tipoCambio = WebScrapping.cambiodolar();
         Cola cola = AdministradorArchivo.cargarCola();
-        cola.imprimirDetalles();
-        System.out.println("Cola cargada: " + cola);
-        
-        cola.encola(new Tiquete("Juan Perez", 1, 30, TipoTramite.DEPOSITOS, TipoTiquete.A));
-        cola.encola(new Tiquete("Maria Lopez", 2, 45, TipoTramite.RETIROS, TipoTiquete.B));
-        cola.encola(new Tiquete("Carlos Jimenez", 3, 50, TipoTramite.CAMBIO_DIVISAS, TipoTiquete.P));
-        
-        System.out.println("Cola después de agregar tiquetes: " + cola);
-        cola.imprimirDetalles();
-        try {
-            System.out.println("Atendiendo: " + cola.atiende().getNombre());
-            System.out.println("Atendiendo: " + cola.atiende().getNombre());
-        } catch (Exception e) {
-            System.err.println("Error al atender un tiquete: " + e.getMessage());
-        }
-        
-        System.out.println("Cola después de atender tiquetes: " + cola);
-        cola.imprimirDetalles();
+        JOptionPane.showMessageDialog(null, "Cambio de dolar a colones al día de hoy: " + tipoCambio);
+
+        // Crear la interfaz de usuario y mostrar el menú
+        InterfazUsuario interfaz = new InterfazUsuario(cola);
+        interfaz.mostrarMenu();
+
+        // Guardar la cola en el archivo antes de salir
         AdministradorArchivo.guardarCola(cola);
+        JOptionPane.showMessageDialog(null, "Cola guardada.");
     }
     
 }
+
+
