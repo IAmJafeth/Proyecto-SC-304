@@ -29,7 +29,7 @@ public class AdministradorArchivo {
                 actual = actual.getSig();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
     
@@ -58,7 +58,7 @@ public class AdministradorArchivo {
                 cola.encola(tiquete);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return cola;
     }
