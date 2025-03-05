@@ -82,6 +82,16 @@ public class Tiquete {
         this.tipo = tipo;
     }
 
+    public String getDetalles() {
+        return "Nombre: " + nombre + "\n" +
+                "ID: " + id + "\n" +
+                "Edad: " + edad + "\n" +
+                "Hora de creación: " + horaCreacion + "\n" +
+                "Hora de atención: " + (horaAtencion.equals(LocalDateTime.MIN) ? "No atendido" : horaAtencion) + "\n" +
+                "Trámite: " + tramite.getDisplayName() + "\n" +
+                "Tipo: " + tipo.getDisplayName();
+    }
+
     @Override
     public String toString() {
         return "Tiquete{" +

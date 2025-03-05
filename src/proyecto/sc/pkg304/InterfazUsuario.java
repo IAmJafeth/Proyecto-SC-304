@@ -17,7 +17,7 @@ public class InterfazUsuario {
 
     public void mostrarMenu() {
         while (true) {
-            String[] opciones = {"Agregar Tiquete", "Atender Tiquete", "Mostrar Cola", "Salir"};
+            String[] opciones = { "Agregar Tiquete", "Atender Tiquete", "Mostrar Cola", "Salir" };
             int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opción:", "Menú Principal",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
@@ -41,18 +41,62 @@ public class InterfazUsuario {
 
     private void agregarTiquete() {
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
-        int id = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del cliente:"));
-        int edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la edad del cliente:"));
-        TipoTramite tramite = (TipoTramite) JOptionPane.showInputDialog(null, "Seleccione el tipo de trámite:",
-                "Tipo de Trámite", JOptionPane.QUESTION_MESSAGE, null, TipoTramite.values(), TipoTramite.DEPOSITOS);
-        TipoTiquete tipo = (TipoTiquete) JOptionPane.showInputDialog(null, "Seleccione el tipo de tiquete:",
-                "Tipo de Tiquete", JOptionPane.QUESTION_MESSAGE, null, TipoTiquete.values(), TipoTiquete.A);
+        int id;
+        while (true) {
+            try {
+                id = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del cliente:"));
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "El ID debe ser un número entero.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        int edad;
+        while (true) {
+            try {
+                edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la edad del cliente:"));
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "La edad debe ser un número entero.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        TipoTramite[] tramites = TipoTramite.values();
+        String[] tramiteDisplayNames = new String[tramites.length];
+        for (int i = 0; i < tramites.length; i++) {
+            tramiteDisplayNames[i] = tramites[i].getDisplayName();
+        }
+        String tramiteSeleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione el tipo de trámite:",
+                "Tipo de Trámite", JOptionPane.QUESTION_MESSAGE, null, tramiteDisplayNames, tramiteDisplayNames[0]);
+        TipoTramite tramite = null;
+        for (TipoTramite t : tramites) {
+            if (t.getDisplayName().equals(tramiteSeleccionado)) {
+                tramite = t;
+                break;
+            }
+        }
+
+        TipoTiquete[] tipos = TipoTiquete.values();
+        String[] tipoDisplayNames = new String[tipos.length];
+        for (int i = 0; i < tipos.length; i++) {
+            tipoDisplayNames[i] = tipos[i].getDisplayName();
+        }
+        String tipoSeleccionado = (String) JOptionPane.showInputDialog(null, "Seleccione el tipo de tiquete:",
+                "Tipo de Tiquete", JOptionPane.QUESTION_MESSAGE, null, tipoDisplayNames, tipoDisplayNames[0]);
+        TipoTiquete tipo = null;
+        for (TipoTiquete t : tipos) {
+            if (t.getDisplayName().equals(tipoSeleccionado)) {
+                tipo = t;
+                break;
+            }
+        }
 
         Tiquete tiquete = new Tiquete(nombre, id, edad, tramite, tipo);
         cola.encola(tiquete);
 
         // Mostrar detalles del tiquete
-        String mensaje = "Tiquete creado:\n" + tiquete.toString() + "\n\n";
+        String mensaje = "Tiquete creado:\n" + tiquete.getDetalles() + "\n\n";
         mensaje += "Caja asignada: Caja " + (tipo == TipoTiquete.P ? "1 (Preferencial)" : "2 (General)") + "\n";
         mensaje += "Personas por delante: " + contarPersonasPorDelante(tiquete);
         JOptionPane.showMessageDialog(null, mensaje);
@@ -62,7 +106,7 @@ public class InterfazUsuario {
         try {
             Tiquete tiqueteAtendido = cola.atiende();
             tiqueteAtendido.setHoraAtencion(LocalDateTime.now());
-            String mensaje = "Atendiendo a:\n" + tiqueteAtendido.toString();
+            String mensaje = "Atendiendo a:\n" + tiqueteAtendido.getDetalles();
             JOptionPane.showMessageDialog(null, mensaje);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -73,10 +117,11 @@ public class InterfazUsuario {
         if (cola.isEmpty()) {
             JOptionPane.showMessageDialog(null, "La cola está vacía.");
         } else {
-            StringBuilder mensaje = new StringBuilder("Estado actual de la cola:\n");
+            StringBuilder mensaje = new StringBuilder("Estado actual de la cola: " + cola + "\n");
             Nodo actual = cola.getFrente();
             while (actual != null) {
-                mensaje.append(actual.geTiquete().toString()).append("\n");
+                mensaje.append("--------------------\n");
+                mensaje.append(actual.geTiquete().getDetalles()).append("\n");
                 actual = actual.getSig();
             }
             JOptionPane.showMessageDialog(null, mensaje.toString());
