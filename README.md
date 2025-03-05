@@ -6,5 +6,6 @@
 
 ## Integrantes
 
-- Jafeth Garro Roldán
+- Jafeth Arturo Garro Roldán
 - Jair Cerdas Fallas
+- Allan Fauricio Fonseca Batista
