@@ -40,28 +40,54 @@ public class InterfazUsuario {
     }
 
     private void agregarTiquete() {
-        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+        String nombre;
+
+        while (true) {
+            nombre = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+            if (nombre == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return; // Cancelar
+            } else if (nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "El nombre no puede estar vacío.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+
+            break;
+        }
+
         int id;
         while (true) {
+            String idStr = JOptionPane.showInputDialog("Ingrese el ID del cliente:");
+            if (idStr == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return; // Cancelar
+            }
             try {
-                id = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del cliente:"));
+                id = Integer.parseInt(idStr);
                 break;
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "El ID debe ser un número entero.", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
+
         int edad;
         while (true) {
+            String edadStr = JOptionPane.showInputDialog("Ingrese la edad del cliente:");
+            if (edadStr == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return; // Cancelar
+            }
             try {
-                edad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la edad del cliente:"));
+                edad = Integer.parseInt(edadStr);
                 break;
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "La edad debe ser un número entero.", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         }
-        
+
         TipoTramite[] tramites = TipoTramite.values();
         String[] tramiteDisplayNames = new String[tramites.length];
         for (int i = 0; i < tramites.length; i++) {
