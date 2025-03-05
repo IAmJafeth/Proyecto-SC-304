@@ -6,5 +6,5 @@
 
 ## Integrantes
 
-Jafeth Garro Roldán
-Jair Cerdas Fallas
+- Jafeth Garro Roldán
+- Jair Cerdas Fallas
