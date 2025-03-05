@@ -3,7 +3,7 @@ package proyecto.sc.pkg304;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Tiquete implements Serializable {
+public class Tiquete {
     private String nombre;
     private int id;
     private int edad;

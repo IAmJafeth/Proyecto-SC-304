@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author jafeth.garro
  */
-public class Cola implements Serializable{
+public class Cola{
     private Nodo frente;
     private Nodo fin;
 
@@ -17,6 +17,10 @@ public class Cola implements Serializable{
 
     public boolean isEmpty() {
         return frente == null;
+    }
+
+    public Nodo getFrente() {
+        return frente;
     }
 
     public void encola(Tiquete tiquete) {

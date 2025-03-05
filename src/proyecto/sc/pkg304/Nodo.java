@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author jafeth.garro
  */
-public class Nodo implements Serializable{
+public class Nodo{
     private Tiquete tiqete;
     private Nodo sig;
 
