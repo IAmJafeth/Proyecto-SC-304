@@ -1,13 +1,13 @@
 package proyecto.sc.pkg304;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
-public class Tiquete {
+public class Tiquete implements Serializable {
     private String nombre;
     private int id;
     private int edad;
-    private LocalDateTime horaCreación;
+    private LocalDateTime horaCreacion;
     private LocalDateTime horaAtencion;
     private TipoTramite tramite;
     private TipoTiquete tipo;
@@ -18,12 +18,12 @@ public class Tiquete {
         this.edad = edad;
         this.tramite = tramite;
         this.tipo = tipo;
-        
-        this.horaCreación = LocalDateTime.now();
+
+        this.horaCreacion = LocalDateTime.now();
         this.horaAtencion = LocalDateTime.MIN; // Esto representa que la fecha y hora no se ha asignado.
     }
-    
-    public boolean isCompleted(){
+
+    public boolean isCompleted() {
         return horaAtencion != LocalDateTime.MIN;
     }
 
@@ -52,11 +52,11 @@ public class Tiquete {
     }
 
     public LocalDateTime getHoraCreación() {
-        return horaCreación;
+        return horaCreacion;
     }
 
     public void setHoraCreación(LocalDateTime horaCreación) {
-        this.horaCreación = horaCreación;
+        this.horaCreacion = horaCreación;
     }
 
     public LocalDateTime getHoraAtencion() {
@@ -82,5 +82,17 @@ public class Tiquete {
     public void setTipo(TipoTiquete tipo) {
         this.tipo = tipo;
     }
-           
+
+    @Override
+    public String toString() {
+        return "Tiquete{" +
+                "nombre='" + nombre + '\'' +
+                ", id=" + id +
+                ", edad=" + edad +
+                ", horaCreacion=" + horaCreacion +
+                ", horaAtencion=" + (horaAtencion.equals(LocalDateTime.MIN) ? "No atendido" : horaAtencion) +
+                ", tramite=" + tramite.getDisplayName() +
+                ", tipo=" + tipo.getDisplayName() +
+                '}';
+    }
 }

@@ -4,11 +4,13 @@
  */
 package proyecto.sc.pkg304;
 
+import java.io.Serializable;
+
 /**
  *
  * @author jafeth.garro
  */
-public class Nodo {
+public class Nodo implements Serializable{
     private Tiquete tiqete;
     private Nodo sig;
 

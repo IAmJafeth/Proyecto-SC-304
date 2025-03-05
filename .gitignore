@@ -25,3 +25,5 @@ replay_pid*
 /Proyecto-SC-304/nbproject/private/
 /.idea
 /build/
+~.bashrc
+cola_tiquetes.ser

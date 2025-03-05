@@ -1,20 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package proyecto.sc.pkg304;
+
+import java.io.Serializable;
 
 /**
  *
  * @author jafeth.garro
  */
-public class Cola {
+public class Cola implements Serializable{
     private Nodo frente;
     private Nodo fin;
 
     public Cola() {
         frente = null;
         fin = null;
+    }
+
+    public boolean isEmpty() {
+        return frente == null;
     }
 
     public void encola(Tiquete tiquete) {
@@ -40,6 +42,17 @@ public class Cola {
         return tiquete;
     }
     
+    public void imprimirDetalles() {
+        if (isEmpty()) {
+            System.out.println("La cola está vacía.");
+        } else {
+            Nodo actual = frente;
+            while (actual != null) {
+                System.out.println(actual.geTiquete());
+                actual = actual.getSig();
+            }
+        }
+    }
     
     @Override
     public String toString() {
