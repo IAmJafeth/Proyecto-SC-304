@@ -9,19 +9,19 @@ package proyecto.sc.pkg304;
  * @author jafeth.garro
  */
 public class Nodo{
-    private Tiquete tiqete;
+    private Tiquete tiquete;
     private Nodo sig;
 
     public Nodo(Tiquete tiquete) {
-        this.tiqete = tiquete;
+        this.tiquete = tiquete;
     }
 
-    public Tiquete geTiquete() {
-        return tiqete;
+    public Tiquete getTiquete() {
+        return tiquete;
     }
 
     public void setTiquete(Tiquete tiquete) {
-        this.tiqete = tiquete;
+        this.tiquete = tiquete;
     }
 
     public Nodo getSig() {
@@ -34,8 +34,6 @@ public class Nodo{
 
     @Override
     public String toString() {
-        return "Nodo{" + "tiquete=" + tiqete + "}";
+        return "Nodo{" + "tiquete=" + tiquete + "}";
     }
-    
-    
 }

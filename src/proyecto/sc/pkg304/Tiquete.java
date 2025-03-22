@@ -22,6 +22,16 @@ public class Tiquete {
         this.horaAtencion = LocalDateTime.MIN; // Esto representa que la fecha y hora no se ha asignado.
     }
 
+    public Tiquete(String nombre, int id, int edad, TipoTramite tramite, TipoTiquete tipo, LocalDateTime horaCreacion, LocalDateTime horaAtencion) {
+        this.nombre = nombre;
+        this.id = id;
+        this.edad = edad;
+        this.tramite = tramite;
+        this.tipo = tipo;
+        this.horaCreacion = horaCreacion;
+        this.horaAtencion = horaAtencion;
+    }
+
     public boolean isCompleted() {
         return horaAtencion != LocalDateTime.MIN;
     }
@@ -50,16 +60,20 @@ public class Tiquete {
         this.edad = edad;
     }
 
-    public LocalDateTime getHoraCreación() {
+    public LocalDateTime getHoraCreacion() {
         return horaCreacion;
     }
 
-    public void setHoraCreación(LocalDateTime horaCreación) {
+    public void setHoraCreacion(LocalDateTime horaCreación) {
         this.horaCreacion = horaCreación;
     }
 
     public LocalDateTime getHoraAtencion() {
         return horaAtencion;
+    }
+
+    public void setHoraAtencion(){
+        this.horaAtencion = LocalDateTime.now();
     }
 
     public void setHoraAtencion(LocalDateTime horaAtencion) {

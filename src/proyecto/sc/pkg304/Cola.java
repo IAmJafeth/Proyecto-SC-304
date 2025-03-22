@@ -25,18 +25,17 @@ public class Cola{
         Nodo nuevo = new Nodo(tiquete);
         if (fin == null) {
             frente = nuevo;
-            fin = nuevo;
         } else {
             fin.setSig(nuevo);
-            fin = nuevo;
         }
+        fin = nuevo;
     }
 
     public Tiquete atiende() throws Exception{
         if (frente == null) { 
             throw new Exception("La cola está vacia");
         }
-        Tiquete tiquete = frente.geTiquete();
+        Tiquete tiquete = frente.getTiquete();
         frente = frente.getSig();
         if (frente == null) { 
             fin = null;
@@ -50,10 +49,20 @@ public class Cola{
         } else {
             Nodo actual = frente;
             while (actual != null) {
-                System.out.println(actual.geTiquete());
+                System.out.println(actual.getTiquete());
                 actual = actual.getSig();
             }
         }
+    }
+
+    int size() {
+        int contador = 0;
+        Nodo actual = frente;
+        while (actual != null) {
+            contador++;
+            actual = actual.getSig();
+        }
+        return contador;
     }
     
     @Override
@@ -61,7 +70,7 @@ public class Cola{
         StringBuilder sb = new StringBuilder();
         Nodo actual = frente;
         while (actual != null) {
-            sb.append(actual.geTiquete().getNombre()).append(" -> ");
+            sb.append(actual.getTiquete().getNombre()).append(" -> ");
             actual = actual.getSig();
         }
         sb.append("null");
