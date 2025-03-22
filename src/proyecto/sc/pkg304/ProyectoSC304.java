@@ -16,17 +16,14 @@ public class ProyectoSC304 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String tipoCambio = WebScrapping.cambiodolar();
-        Cola cola = AdministradorArchivo.cargarCola();
-        JOptionPane.showMessageDialog(null, "Cambio de dolar a colones al día de hoy: " + tipoCambio);
+        GestorCajas gestorCajas = AdministradorArchivo.cargarGestorCajas();
+        if (gestorCajas == null) {
+            gestorCajas = InterfazUsuario.configuracionInicial();
+        }
+        if (gestorCajas != null) {
+            InterfazUsuario interfazUsuario = new InterfazUsuario(gestorCajas);
+        }
 
-        // Crear la interfaz de usuario y mostrar el menú
-        InterfazUsuario interfaz = new InterfazUsuario(cola);
-        interfaz.mostrarMenu();
-
-        // Guardar la cola en el archivo antes de salir
-        AdministradorArchivo.guardarCola(cola);
-        JOptionPane.showMessageDialog(null, "Cola guardada.");
     }
     
 }

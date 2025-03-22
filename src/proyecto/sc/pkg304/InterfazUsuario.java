@@ -9,10 +9,72 @@ import java.time.LocalDateTime;
 
 public class InterfazUsuario {
 
-    private Cola cola;
+    private GestorCajas gestorCajas;
 
-    public InterfazUsuario(Cola cola) {
-        this.cola = cola;
+    public InterfazUsuario(GestorCajas gestorCajas) {
+        this.gestorCajas = gestorCajas;
+    }
+
+    public static GestorCajas configuracionInicial(){
+        JOptionPane.showMessageDialog(null, "Bienvenido al sistema de atención de trámites.\n"
+                + "Por favor, configure la cantidad de cajas generales , preferenciales y rápidas.");
+        int cantidadCajasGenerales;
+        int cantidadCajasRapidas;
+        int cantidadCajasPreferenciales;
+
+        while (true) {
+            String cantidadCajasGeneralesStr = JOptionPane.showInputDialog("Ingrese la cantidad de cajas generales:");
+            if (cantidadCajasGeneralesStr == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return null; // Cancelar
+            }
+            try {
+                cantidadCajasGenerales = Integer.parseInt(cantidadCajasGeneralesStr);
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "La cantidad de cajas generales debe ser un número entero.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        while (true) {
+            String cantidadCajasRapidasStr = JOptionPane.showInputDialog("Ingrese la cantidad de cajas rápidas:");
+            if (cantidadCajasRapidasStr == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return null; // Cancelar
+            }
+            try {
+                cantidadCajasRapidas = Integer.parseInt(cantidadCajasRapidasStr);
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "La cantidad de cajas rápidas debe ser un número entero.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+
+        while (true) {
+            String cantidadCajasPreferencialesStr = JOptionPane.showInputDialog("Ingrese la cantidad de cajas preferenciales:");
+            if (cantidadCajasPreferencialesStr == null) {
+                JOptionPane.showMessageDialog(null, "Operación cancelada.");
+                return null; // Cancelar
+            }
+            try {
+                cantidadCajasPreferenciales = Integer.parseInt(cantidadCajasPreferencialesStr);
+                break;
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "La cantidad de cajas preferenciales debe ser un número entero.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        GestorCajas gestorCajas = new GestorCajas(cantidadCajasGenerales, cantidadCajasRapidas, cantidadCajasPreferenciales);
+        JOptionPane.showMessageDialog(null, "Cajas Configuradas." +
+                "\n" + "Cajas Generales: " + cantidadCajasGenerales +
+                "\n" + "Cajas Rápidas: " + cantidadCajasRapidas +
+                "\n" + "Cajas Preferenciales: " + cantidadCajasPreferenciales +
+                "\n\n" + "Detalles de las cajas: \n" + gestorCajas.imprimirDetalles()
+        );
+        return gestorCajas;
     }
 
     public void mostrarMenu() {
@@ -147,7 +209,7 @@ public class InterfazUsuario {
             Nodo actual = cola.getFrente();
             while (actual != null) {
                 mensaje.append("--------------------\n");
-                mensaje.append(actual.geTiquete().getDetalles()).append("\n");
+                mensaje.append(actual.getTiquete().getDetalles()).append("\n");
                 actual = actual.getSig();
             }
             JOptionPane.showMessageDialog(null, mensaje.toString());
@@ -157,7 +219,7 @@ public class InterfazUsuario {
     private int contarPersonasPorDelante(Tiquete tiquete) {
         int count = 0;
         Nodo actual = cola.getFrente();
-        while (actual != null && !actual.geTiquete().equals(tiquete)) {
+        while (actual != null && !actual.getTiquete().equals(tiquete)) {
             count++;
             actual = actual.getSig();
         }

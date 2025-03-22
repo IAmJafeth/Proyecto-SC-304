@@ -13,53 +13,64 @@ import java.time.format.DateTimeFormatter;
  * @author jgarr
  */
 public class AdministradorArchivo {
-    private static final String FILE_NAME = "cola_tiquetes.txt";
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    
-    public static void guardarCola(Cola cola) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            Nodo actual = cola.getFrente();
-            while (actual != null) {
-                Tiquete t = actual.geTiquete();
-                writer.write(t.getNombre() + "," + t.getId() + "," + t.getEdad() + "," +
-                        t.getHoraCreación().format(FORMATTER) + "," +
-                        (t.isCompleted() ? t.getHoraAtencion().format(FORMATTER) : "No atendido") + "," +
-                        t.getTramite().name() + "," + t.getTipo().name());
-                writer.newLine();
-                actual = actual.getSig();
+
+    public static void guardarGestorCajas(GestorCajas gestorCajas){
+        try {
+            FileWriter file = new FileWriter("gestorCajas.txt");
+            PrintWriter writer = new PrintWriter(file);
+            writer.println(gestorCajas.getCajas().length);
+            writer.println(gestorCajas.getCantidadCajasRapidas());
+            writer.println(gestorCajas.getCantidadCajasPreferenciales());
+            for (Caja caja : gestorCajas.getCajas()) {
+                writer.println(caja.getNombre());
+                writer.println(caja.getCola().size());
+                writer.println(caja.getTipoCaja());
+                Nodo nodo = caja.getCola().getFrente();
+                while (nodo != null) {
+                    Tiquete tiquete = nodo.getTiquete();
+                    writer.println(tiquete.getNombre());
+                    writer.println(tiquete.getId());
+                    writer.println(tiquete.getEdad());
+                    writer.println(tiquete.getHoraCreacion().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    writer.println(tiquete.getHoraAtencion().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    writer.println(tiquete.getTramite().name());
+                    writer.println(tiquete.getTipo().name());
+                    nodo = nodo.getSig();
+                }
             }
+            writer.close();
         } catch (IOException e) {
-            e.getMessage();
+            System.out.println("Error al guardar el gestor de cajas.");
         }
     }
-    
-    public static Cola cargarCola() {
-        Cola cola = new Cola();
-        File file = new File(FILE_NAME);
-        if (!file.exists()) {
-            return cola;
-        }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                String nombre = data[0];
-                int id = Integer.parseInt(data[1]);
-                int edad = Integer.parseInt(data[2]);
-                LocalDateTime horaCreacion = LocalDateTime.parse(data[3], FORMATTER);
-                LocalDateTime horaAtencion = data[4].equals("No atendido") ? LocalDateTime.MIN : LocalDateTime.parse(data[4], FORMATTER);
-                TipoTramite tramite = TipoTramite.valueOf(data[5]);
-                TipoTiquete tipo = TipoTiquete.valueOf(data[6]);
-                
-                Tiquete tiquete = new Tiquete(nombre, id, edad, tramite, tipo);
-                tiquete.setHoraCreación(horaCreacion);
-                tiquete.setHoraAtencion(horaAtencion);
-                cola.encola(tiquete);
+    public static GestorCajas cargarGestorCajas(){
+        try {
+            FileReader file = new FileReader("gestorCajas.txt");
+            BufferedReader reader = new BufferedReader(file);
+            int cantidadCajas = Integer.parseInt(reader.readLine());
+            int cajasRapidas = Integer.parseInt(reader.readLine());
+            int cajasPreferenciales = Integer.parseInt(reader.readLine());
+            GestorCajas gestorCajas = new GestorCajas(cantidadCajas, cajasRapidas, cajasPreferenciales);
+            for (Caja caja : gestorCajas.getCajas()) {
+                int cantidadTiquetes = Integer.parseInt(reader.readLine());
+                for (int i = 0; i < cantidadTiquetes; i++) {
+                    String nombre = reader.readLine();
+                    int id = Integer.parseInt(reader.readLine());
+                    int edad = Integer.parseInt(reader.readLine());
+                    LocalDateTime horaCreacion = LocalDateTime.parse(reader.readLine(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    LocalDateTime horaAtencion = LocalDateTime.parse(reader.readLine(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    TipoTramite tramite = TipoTramite.valueOf(reader.readLine());
+                    TipoTiquete tipo = TipoTiquete.valueOf(reader.readLine());
+                    Tiquete tiquete = new Tiquete(nombre, id, edad, tramite, tipo, horaCreacion, horaAtencion);
+                    caja.encola(tiquete);
+                }
             }
+            reader.close();
+            return gestorCajas;
         } catch (IOException e) {
-            e.getMessage();
+            System.out.println("Error al cargar el gestor de cajas.");
+            return null;
         }
-        return cola;
     }
 }
