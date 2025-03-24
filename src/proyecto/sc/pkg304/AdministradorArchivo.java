@@ -18,29 +18,48 @@ public class AdministradorArchivo {
         try {
             FileWriter file = new FileWriter("gestorCajas.txt");
             PrintWriter writer = new PrintWriter(file);
-            writer.println(gestorCajas.getCajas().length);
+            writer.println(gestorCajas.getCantidadCajasRegulares());
             writer.println(gestorCajas.getCantidadCajasRapidas());
             writer.println(gestorCajas.getCantidadCajasPreferenciales());
             for (Caja caja : gestorCajas.getCajas()) {
-                writer.println(caja.getNombre());
-                writer.println(caja.getCola().size());
-                writer.println(caja.getTipoCaja());
-                Nodo nodo = caja.getCola().getFrente();
-                while (nodo != null) {
-                    Tiquete tiquete = nodo.getTiquete();
-                    writer.println(tiquete.getNombre());
-                    writer.println(tiquete.getId());
-                    writer.println(tiquete.getEdad());
-                    writer.println(tiquete.getHoraCreacion().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                    writer.println(tiquete.getHoraAtencion().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                    writer.println(tiquete.getTramite().name());
-                    writer.println(tiquete.getTipo().name());
-                    nodo = nodo.getSig();
-                }
+                guardarCaja(caja, writer);
             }
             writer.close();
         } catch (IOException e) {
             System.out.println("Error al guardar el gestor de cajas.");
+        }
+    }
+
+    private static void guardarTiquete(Tiquete tiquete, Writer writer){
+        try {
+            writer.write(tiquete.getNombre() + "\n");
+            writer.write(tiquete.getId() + "\n");
+            writer.write(tiquete.getEdad() + "\n");
+            writer.write(tiquete.getHoraCreacion().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\n");
+            writer.write(tiquete.getHoraAtencion().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\n");
+            writer.write(tiquete.getTramite().name() + "\n");
+            writer.write(tiquete.getTipo().name() + "\n");
+        } catch (IOException e) {
+            System.out.println("Error al guardar el tiquete.");
+        }
+    }
+
+    private static void guardarCaja(Caja caja, Writer writer){
+        try {
+            if (caja.isOcupada()){
+                writer.write(caja.getCola().size() + 1 + "\n");
+                guardarTiquete(caja.getTiqueteActual(), writer);
+            } else {
+                writer.write(caja.getCola().size() + "\n");
+            }
+            Nodo nodo = caja.getCola().getFrente();
+            while (nodo != null) {
+                Tiquete tiquete = nodo.getTiquete();
+                guardarTiquete(tiquete, writer);
+                nodo = nodo.getSig();
+            }
+        } catch (IOException e) {
+            System.out.println("Error al guardar la caja.");
         }
     }
 
@@ -53,7 +72,9 @@ public class AdministradorArchivo {
             int cajasPreferenciales = Integer.parseInt(reader.readLine());
             GestorCajas gestorCajas = new GestorCajas(cantidadCajas, cajasRapidas, cajasPreferenciales);
             for (Caja caja : gestorCajas.getCajas()) {
+                System.out.println("Caja" + caja);
                 int cantidadTiquetes = Integer.parseInt(reader.readLine());
+                System.out.println("Cantidad de tiquetes" + cantidadTiquetes);
                 for (int i = 0; i < cantidadTiquetes; i++) {
                     String nombre = reader.readLine();
                     int id = Integer.parseInt(reader.readLine());
@@ -62,7 +83,7 @@ public class AdministradorArchivo {
                     LocalDateTime horaAtencion = LocalDateTime.parse(reader.readLine(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                     TipoTramite tramite = TipoTramite.valueOf(reader.readLine());
                     TipoTiquete tipo = TipoTiquete.valueOf(reader.readLine());
-                    Tiquete tiquete = new Tiquete(nombre, id, edad, tramite, tipo, horaCreacion, horaAtencion);
+                    Tiquete tiquete =  new Tiquete(nombre, id, edad, tramite, tipo, horaCreacion, horaAtencion);
                     caja.encola(tiquete);
                 }
             }
