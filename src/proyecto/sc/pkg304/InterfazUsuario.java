@@ -79,7 +79,7 @@ public class InterfazUsuario {
 
     public void mostrarMenu() {
         while (true) {
-            String[] opciones = { "Agregar Tiquete", "Atender Tiquete", "Mostrar Cola", "Salir" };
+            String[] opciones = { "Agregar Tiquete", "Atender Tiquetes", "Mostrar Cajas", "Atender Tiquete (Caja Especifica)", "Salir" };
             int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opción:", "Menú Principal",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
@@ -88,13 +88,16 @@ public class InterfazUsuario {
                     agregarTiquete();
                     break;
                 case 1:
-                    atenderTiquete();
+                    atenderTiquetes();
                     break;
                 case 2:
                     mostrarCola();
                     break;
                 case 3:
-                    return; // Salir del menú
+//                    atenderTiqueteCajaEspecifica();
+                    break;
+                case 4:
+                    return;
                 default:
                     JOptionPane.showMessageDialog(null, "Opción no válida.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -181,48 +184,20 @@ public class InterfazUsuario {
         }
 
         Tiquete tiquete = new Tiquete(nombre, id, edad, tramite, tipo);
-        cola.encola(tiquete);
+        gestorCajas.encola(tiquete);
 
-        // Mostrar detalles del tiquete
-        String mensaje = "Tiquete creado:\n" + tiquete.getDetalles() + "\n\n";
-        mensaje += "Caja asignada: Caja " + (tipo == TipoTiquete.P ? "1 (Preferencial)" : "2 (General)") + "\n";
-        mensaje += "Personas por delante: " + contarPersonasPorDelante(tiquete);
-        JOptionPane.showMessageDialog(null, mensaje);
     }
 
-    private void atenderTiquete() {
-        try {
-            Tiquete tiqueteAtendido = cola.atiende();
-            tiqueteAtendido.setHoraAtencion(LocalDateTime.now());
-            String mensaje = "Atendiendo a:\n" + tiqueteAtendido.getDetalles();
-            JOptionPane.showMessageDialog(null, mensaje);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    private void atenderTiquetes() {
+        gestorCajas.atiende();
+
     }
 
     private void mostrarCola() {
-        if (cola.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "La cola está vacía.");
-        } else {
-            StringBuilder mensaje = new StringBuilder("Estado actual de la cola: " + cola + "\n");
-            Nodo actual = cola.getFrente();
-            while (actual != null) {
-                mensaje.append("--------------------\n");
-                mensaje.append(actual.getTiquete().getDetalles()).append("\n");
-                actual = actual.getSig();
-            }
-            JOptionPane.showMessageDialog(null, mensaje.toString());
-        }
+        JOptionPane.showMessageDialog(null, gestorCajas.imprimirDetalles());
     }
 
-    private int contarPersonasPorDelante(Tiquete tiquete) {
-        int count = 0;
-        Nodo actual = cola.getFrente();
-        while (actual != null && !actual.getTiquete().equals(tiquete)) {
-            count++;
-            actual = actual.getSig();
-        }
-        return count;
+    public GestorCajas getGestorCajas() {
+        return gestorCajas;
     }
 }

@@ -5,6 +5,7 @@
 package proyecto.sc.pkg304;
 
 import javax.swing.JOptionPane;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -17,15 +18,24 @@ public class ProyectoSC304 {
      */
     public static void main(String[] args) {
         GestorCajas gestorCajas = AdministradorArchivo.cargarGestorCajas();
+        InterfazUsuario interfazUsuario;
+
         if (gestorCajas == null) {
             gestorCajas = InterfazUsuario.configuracionInicial();
         }
-        if (gestorCajas != null) {
-            InterfazUsuario interfazUsuario = new InterfazUsuario(gestorCajas);
-        }
+
+
+        interfazUsuario = new InterfazUsuario(gestorCajas);
+
+        System.out.println(gestorCajas.imprimirDetalles());
+        interfazUsuario.mostrarMenu();
+
+        AdministradorArchivo.guardarGestorCajas(interfazUsuario.getGestorCajas());
+
+
 
     }
-    
+
 }
 
 

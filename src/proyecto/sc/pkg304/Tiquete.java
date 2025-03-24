@@ -1,6 +1,7 @@
 package proyecto.sc.pkg304;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Tiquete {
     private String nombre;
@@ -100,8 +101,8 @@ public class Tiquete {
         return "Nombre: " + nombre + "\n" +
                 "ID: " + id + "\n" +
                 "Edad: " + edad + "\n" +
-                "Hora de creación: " + horaCreacion + "\n" +
-                "Hora de atención: " + (horaAtencion.equals(LocalDateTime.MIN) ? "No atendido" : horaAtencion) + "\n" +
+                "Hora de creación: " + horaCreacion.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + "\n" +
+                "Hora de atención: " + (horaAtencion.equals(LocalDateTime.MIN) ? "No atendido" : horaAtencion.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))) + "\n" +
                 "Trámite: " + tramite.getDisplayName() + "\n" +
                 "Tipo: " + tipo.getDisplayName();
     }

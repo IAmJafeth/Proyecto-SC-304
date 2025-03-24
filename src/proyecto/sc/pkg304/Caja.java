@@ -25,12 +25,12 @@ public class Caja {
     }
 
     public int getTiquetesEnCola() {
-        return cola.size();
+        return isOcupada() ? cola.size() + 1 : cola.size();
     }
 
     public Tiquete atiende() throws Exception {
         if (tiqueteActual == null) {
-            throw new Exception("No hay tiquetes por atender.");
+            throw new Exception(this + ": No hay tiquetes para atender.");
         }
 
         Tiquete tiquete = tiqueteActual;
@@ -44,21 +44,26 @@ public class Caja {
     }
 
     public String imprimirDetalles() {
-        // crear un string agradable con los detalles de la caja
-        String detalles = "Caja: " + nombre + " (" + tipoCaja + ")\n";
+        String detalles = "Caja: " + nombre + "\n";
         if (isOcupada()) {
-            detalles += "Atendiendo a:\n" + tiqueteActual.getDetalles() + "\n";
+            detalles += "Atendiendo a: " + tiqueteActual.getNombre() + "\n";
         } else {
             detalles += "Sin tiquetes en espera.\n";
         }
 
         if (!cola.isEmpty()) {
-            detalles += "Tiquetes en cola:\n";
+            detalles += "Tiquetes en cola: " + cola.size() + "\n";
             Nodo actual = cola.getFrente();
             while (actual != null) {
-                detalles += actual.getTiquete().getDetalles() + "\n";
+                // arregla que la flecha apunte al siguiente tiquete y no se vea al final si es el último
+                if (actual.getSig() == null) {
+                    detalles += actual.getTiquete().getNombre();
+                } else {
+                    detalles += actual.getTiquete().getNombre() + " > ";
+                }
                 actual = actual.getSig();
             }
+            detalles += "\n";
         }
 
         return detalles;
@@ -99,6 +104,6 @@ public class Caja {
 
     @Override
     public String toString() {
-        return  "Caja: " + nombre + " (" + tipoCaja + ")\n";
+        return  "Caja: " + nombre + " (" + tipoCaja + ")";
     }
 }

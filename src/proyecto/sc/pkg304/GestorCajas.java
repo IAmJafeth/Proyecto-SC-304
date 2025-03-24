@@ -1,5 +1,6 @@
 package proyecto.sc.pkg304;
 
+import javax.swing.*;
 import java.util.Arrays;
 
 public class GestorCajas {
@@ -24,6 +25,16 @@ public class GestorCajas {
     
     public Caja[] getCajas() {
         return cajas;
+    }
+
+    public int getCantidadCajasRegulares() {
+        int contador = 0;
+        for (Caja caja : cajas) {
+            if (caja.getTipoCaja() == TipoCaja.Regular) {
+                contador++;
+            }
+        }
+        return contador;
     }
     
     public int getCantidadCajasRapidas() {
@@ -55,28 +66,55 @@ public class GestorCajas {
     }
 
     public void encola(Tiquete tiquete) {
-        Caja cajaMenosOcupada = cajas[0];
-        for (Caja caja : cajas) {
-            if (caja.getTiquetesEnCola() < cajaMenosOcupada.getTiquetesEnCola()) {
-                cajaMenosOcupada = caja;
-            }
+        Caja cajaSeleccionada;
+        if (tiquete.getTipo() == TipoTiquete.P) {
+            cajaSeleccionada = getCajaConMenosPersonas(TipoCaja.Preferencial);
+        } else if (tiquete.getTipo() == TipoTiquete.A) {
+            cajaSeleccionada = getCajaConMenosPersonas(TipoCaja.Rapida);
+        } else {
+            cajaSeleccionada = getCajaConMenosPersonas(TipoCaja.Regular);
         }
 
-        cajaMenosOcupada.encola(tiquete);
-        System.out.println("Encolando tiquete: " + tiquete + " en caja " + cajaMenosOcupada.getNombre() + " - Tiquetes en cola: " + cajaMenosOcupada.getTiquetesEnCola());
+        if (cajaSeleccionada == null) {
+            System.out.println("No hay cajas disponibles para el tiquete " + tiquete);
+            return;
+        }
+
+        cajaSeleccionada.encola(tiquete);
+
+        JOptionPane.showMessageDialog(null, "Tiquete creado:\n" + tiquete.getDetalles() + "\n"
+                + (cajaSeleccionada.isOcupada() ? "Personas por delante: " + cajaSeleccionada.getTiquetesEnCola()  : "Tiquete siendo atendido inmediatamente, no hay personas por delante.")
+                + "\nCaja asignada: " + cajaSeleccionada + "\n"
+        );
     }
 
-    public void atiende() {
+    public Caja getCajaConMenosPersonas(TipoCaja tipo) {
+        Caja cajaConMenosPersonas = null;
+        int menorCantidad = Integer.MAX_VALUE;
         for (Caja caja : cajas) {
-            if (!caja.isOcupada() && !caja.getCola().isEmpty()) {
-                try {
-                    Tiquete tiquete = caja.atiende();
-                    System.out.println("Atendiendo tiquete: " + tiquete + " en caja " + caja.getNombre());
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+           if (caja.getTipoCaja() == tipo && caja.getCola().size() < menorCantidad) {
+               if (!caja.isOcupada()) {
+                   return caja;
+               }
+               cajaConMenosPersonas = caja;
+               menorCantidad = caja.getCola().size();
             }
         }
+        return cajaConMenosPersonas;
+    }
+
+
+    public void atiende() {
+        String mensaje = "";
+        for (Caja caja : cajas) {
+            try {
+                Tiquete tiquete = caja.atiende();
+                mensaje += caja + " Atendiendo tiquete: \n" + tiquete.getDetalles() + "\n\n";
+            } catch (Exception e) {
+                mensaje += e.getMessage() + "\n\n";
+            }
+        }
+        JOptionPane.showMessageDialog(null, mensaje);
     }
 
     public void atiende(int cajaIndex) {
