@@ -79,7 +79,7 @@ public class InterfazUsuario {
 
     public void mostrarMenu() {
         while (true) {
-            String[] opciones = { "Agregar Tiquete", "Atender Tiquetes", "Mostrar Cajas", "Atender Tiquete (Caja Especifica)", "Salir" };
+            String[] opciones = { "Agregar Tiquete", "Atender Tiquetes", "Mostrar Cajas", "Mostrar Cambio Dolar", "Salir" };
             int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opción:", "Menú Principal",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
@@ -94,10 +94,10 @@ public class InterfazUsuario {
                     mostrarCola();
                     break;
                 case 3:
-//                    atenderTiqueteCajaEspecifica();
+                    mostrarCambioDolar();
                     break;
                 case 4:
-                    return;
+                    return; // Salir
                 default:
                     JOptionPane.showMessageDialog(null, "Opción no válida.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -190,7 +190,10 @@ public class InterfazUsuario {
 
     private void atenderTiquetes() {
         gestorCajas.atiende();
+    }
 
+    private void mostrarCambioDolar() {
+        JOptionPane.showMessageDialog(null, "El tipo de cambio actual es: " + WebScrapping.cambiodolar() + " colones por dólar.");
     }
 
     private void mostrarCola() {
