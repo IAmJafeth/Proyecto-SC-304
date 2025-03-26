@@ -91,15 +91,16 @@ public class GestorCajas {
     public Caja getCajaConMenosPersonas(TipoCaja tipo) {
         Caja cajaConMenosPersonas = null;
         int menorCantidad = Integer.MAX_VALUE;
+
         for (Caja caja : cajas) {
-           if (caja.getTipoCaja() == tipo && caja.getCola().size() < menorCantidad) {
-               if (!caja.isOcupada()) {
-                   return caja;
-               }
-               cajaConMenosPersonas = caja;
-               menorCantidad = caja.getCola().size();
+            int cantidadPersonas = caja.isOcupada() ? caja.getCola().size() + 1 : caja.getCola().size();
+
+            if (caja.getTipoCaja() == tipo && cantidadPersonas < menorCantidad) {
+                cajaConMenosPersonas = caja;
+                menorCantidad = cantidadPersonas;
             }
         }
+
         return cajaConMenosPersonas;
     }
 

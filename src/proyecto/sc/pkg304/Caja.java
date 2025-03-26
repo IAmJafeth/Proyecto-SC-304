@@ -44,7 +44,7 @@ public class Caja {
     }
 
     public String imprimirDetalles() {
-        String detalles = "Caja: " + nombre + "\n";
+        String detalles = "Caja: " + this + "\n";
         if (isOcupada()) {
             detalles += "Atendiendo a: " + tiqueteActual.getNombre() + "\n";
         } else {
