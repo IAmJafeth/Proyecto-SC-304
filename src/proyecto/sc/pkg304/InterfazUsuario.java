@@ -189,7 +189,18 @@ public class InterfazUsuario {
     }
 
     private void atenderTiquetes() {
-        gestorCajas.atiende();
+        // crea una interfaz que muestre un dropdown con las el nombre de las cajas disponibles y seleccione la caja que se desea atender, se mostrara el dropdown con el nombre de la caja y el tipo de caja
+        String[] cajas = gestorCajas.getNombresCajas();
+        String cajaSeleccionada = (String) JOptionPane.showInputDialog(null, "Seleccione la caja a atender:", "Cajas Disponibles",
+                JOptionPane.QUESTION_MESSAGE, null, cajas, cajas[0]);
+        if (cajaSeleccionada == null) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada.");
+            return; // Cancelar
+        }
+        gestorCajas.atiende(cajaSeleccionada);
+
+
+
     }
 
     private void mostrarCambioDolar() {

@@ -11,6 +11,7 @@ public class Tiquete {
     private LocalDateTime horaAtencion;
     private TipoTramite tramite;
     private TipoTiquete tipo;
+    private String caja;
 
     public Tiquete(String nombre, int id, int edad, TipoTramite tramite, TipoTiquete tipo) {
         this.nombre = nombre;
@@ -21,9 +22,10 @@ public class Tiquete {
 
         this.horaCreacion = LocalDateTime.now();
         this.horaAtencion = LocalDateTime.MIN; // Esto representa que la fecha y hora no se ha asignado.
+        this.caja = null;
     }
 
-    public Tiquete(String nombre, int id, int edad, TipoTramite tramite, TipoTiquete tipo, LocalDateTime horaCreacion, LocalDateTime horaAtencion) {
+    public Tiquete(String nombre, int id, int edad, TipoTramite tramite, TipoTiquete tipo, LocalDateTime horaCreacion, LocalDateTime horaAtencion, String caja) {
         this.nombre = nombre;
         this.id = id;
         this.edad = edad;
@@ -31,6 +33,7 @@ public class Tiquete {
         this.tipo = tipo;
         this.horaCreacion = horaCreacion;
         this.horaAtencion = horaAtencion;
+        this.caja = caja;
     }
 
     public boolean isCompleted() {
@@ -95,6 +98,14 @@ public class Tiquete {
 
     public void setTipo(TipoTiquete tipo) {
         this.tipo = tipo;
+    }
+
+    public String getCaja() {
+        return caja;
+    }
+
+    public void setCaja(String nombreCaja) {
+        this.caja = nombreCaja;
     }
 
     public String getDetalles() {

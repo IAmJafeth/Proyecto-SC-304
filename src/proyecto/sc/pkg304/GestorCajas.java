@@ -1,10 +1,11 @@
 package proyecto.sc.pkg304;
 
 import javax.swing.*;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 
 public class GestorCajas {
     private Caja[] cajas;
+    Cola cola;
 
     public GestorCajas(int cajasGenerales, int cajasRapidas, int cajasPreferenciales) {
         cajas = new Caja[cajasGenerales + cajasRapidas + cajasPreferenciales];
@@ -20,9 +21,18 @@ public class GestorCajas {
         for (int i = cajasGenerales + cajasRapidas; i < cajasGenerales + cajasRapidas + cajasPreferenciales; i++) {
             cajas[i] = new Caja("Caja " + (i + 1), TipoCaja.Preferencial);
         }
-        System.out.println(Arrays.toString(cajas));
+
+        cola = new Cola();
     }
-    
+
+    public String getCola(){
+        return cola.toString();
+    }
+
+    public String getDetallesCola(){
+        return cola.imprimirDetalles();
+    }
+
     public Caja[] getCajas() {
         return cajas;
     }
@@ -57,8 +67,19 @@ public class GestorCajas {
         return contador;
     }
 
+    public String[] getNombresCajas() {
+        String[] nombres = new String[cajas.length];
+        for (int i = 0; i < cajas.length; i++) {
+            nombres[i] = cajas[i].toString();
+        }
+        return nombres;
+    }
+
     public String imprimirDetalles() {
         String detalles = "";
+        detalles += "Tiquetes en cola: " + cola.size() + "\n";
+        detalles += "Cola: " + (cola.isEmpty() ? "Vacía" : cola) + "\n\n";
+        detalles += "Detalles de las cajas:\n";
         for (Caja caja : cajas) {
             detalles += caja.imprimirDetalles() + "\n";
         }
@@ -68,70 +89,81 @@ public class GestorCajas {
     public void encola(Tiquete tiquete) {
         Caja cajaSeleccionada;
         if (tiquete.getTipo() == TipoTiquete.P) {
-            cajaSeleccionada = getCajaConMenosPersonas(TipoCaja.Preferencial);
+            cajaSeleccionada = getCajaDisponible(TipoCaja.Preferencial);
         } else if (tiquete.getTipo() == TipoTiquete.A) {
-            cajaSeleccionada = getCajaConMenosPersonas(TipoCaja.Rapida);
+            cajaSeleccionada = getCajaDisponible(TipoCaja.Rapida);
         } else {
-            cajaSeleccionada = getCajaConMenosPersonas(TipoCaja.Regular);
+            cajaSeleccionada = getCajaDisponible(TipoCaja.Regular);
         }
 
         if (cajaSeleccionada == null) {
-            System.out.println("No hay cajas disponibles para el tiquete " + tiquete);
+            cola.encola(tiquete);
+            JOptionPane.showMessageDialog(null,
+                    "No hay cajas disponibles. El tiquete se ha agregado a la cola." +
+                            "\nPersonas por delante: " + (cola.size() - 1) +
+                            "\n\n" + tiquete.getDetalles());
             return;
         }
 
-        cajaSeleccionada.encola(tiquete);
+        cajaSeleccionada.setTiqueteActual(tiquete);
+        JOptionPane.showMessageDialog(null,
+                "El tiquete se ha asignado a la " + cajaSeleccionada +
+                "\n\n" + tiquete.getDetalles());
 
-        JOptionPane.showMessageDialog(null, "Tiquete creado:\n" + tiquete.getDetalles() + "\n"
-                + (cajaSeleccionada.isOcupada() ? "Personas por delante: " + cajaSeleccionada.getTiquetesEnCola()  : "Tiquete siendo atendido inmediatamente, no hay personas por delante.")
-                + "\nCaja asignada: " + cajaSeleccionada + "\n"
-        );
     }
 
-    public Caja getCajaConMenosPersonas(TipoCaja tipo) {
-        Caja cajaConMenosPersonas = null;
-        int menorCantidad = Integer.MAX_VALUE;
-
+    private Caja getCajaDisponible(TipoCaja tipoCaja) {
         for (Caja caja : cajas) {
-            int cantidadPersonas = caja.isOcupada() ? caja.getCola().size() + 1 : caja.getCola().size();
-
-            if (caja.getTipoCaja() == tipo && cantidadPersonas < menorCantidad) {
-                cajaConMenosPersonas = caja;
-                menorCantidad = cantidadPersonas;
+            if (caja.getTipoCaja() == tipoCaja && !caja.isOcupada()) {
+                return caja;
             }
         }
+        return null;
+    }
 
-        return cajaConMenosPersonas;
+    public Caja getCajaPorNombre(String nombreCaja){
+        for (Caja caja : cajas) {
+            if (nombreCaja.equals(caja.toString())) {
+                return caja;
+            }
+        }
+        return null;
     }
 
 
-    public void atiende() {
-        String mensaje = "";
-        for (Caja caja : cajas) {
+    public Tiquete atiende(String nombreCaja) {
+
+        Caja cajaSeleccionada = getCajaPorNombre(nombreCaja);
+        if (cajaSeleccionada == null) {
+            JOptionPane.showMessageDialog(null, "Caja no encontrada.");
+            return null;
+        }
+
+        String mensaje;
+        Tiquete tiqueteAtendido = null;
+        Tiquete tiqueteSiguiente;
+
+        if (cajaSeleccionada.isOcupada()) {
+            tiqueteAtendido = cajaSeleccionada.getTiqueteActual();
+            tiqueteAtendido.setHoraAtencion(LocalDateTime.now());
+            mensaje = "Se ha atendido a " + tiqueteAtendido.getNombre() + "\n" + tiqueteAtendido.getDetalles();
+
             try {
-                Tiquete tiquete = caja.atiende();
-                mensaje += caja + " Atendiendo tiquete: \n" + tiquete.getDetalles() + "\n\n";
+                tiqueteSiguiente = cola.atiende();
+                cajaSeleccionada.setTiqueteActual(tiqueteSiguiente);
+                mensaje += "\n" + "\nAhora se atiende a: " + tiqueteSiguiente.getNombre() +  "\n" + tiqueteSiguiente.getDetalles();
             } catch (Exception e) {
-                mensaje += e.getMessage() + "\n\n";
+                mensaje += "\n" + "No hay más tiquetes en la cola.";
+                cajaSeleccionada.setTiqueteActual(null);
             }
+
+        } else {
+            mensaje = "La caja " + cajaSeleccionada.getNombre() + " no está ocupada.";
         }
+
         JOptionPane.showMessageDialog(null, mensaje);
-    }
+        return tiqueteAtendido;
 
-    public void atiende(int cajaIndex) {
-        if (cajaIndex < 0 || cajaIndex >= cajas.length) {
-            System.out.println("No existe la caja con índice " + cajaIndex);
-            return;
-        }
 
-        Caja caja = cajas[cajaIndex];
-        if (!caja.isOcupada() && !caja.getCola().isEmpty()) {
-            try {
-                Tiquete tiquete = caja.atiende();
-                System.out.println("Atendiendo tiquete: " + tiquete);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
     }
 }

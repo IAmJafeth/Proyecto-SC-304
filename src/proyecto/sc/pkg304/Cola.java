@@ -43,16 +43,18 @@ public class Cola{
         return tiquete;
     }
     
-    public void imprimirDetalles() {
+    public String imprimirDetalles() {
+        String detalles = "";
         if (isEmpty()) {
-            System.out.println("La cola está vacía.");
+            return "La cola está vacía.";
         } else {
             Nodo actual = frente;
             while (actual != null) {
-                System.out.println(actual.getTiquete());
+                detalles += actual.getTiquete().getDetalles() + "\n";
                 actual = actual.getSig();
             }
         }
+        return detalles;
     }
 
     int size() {
