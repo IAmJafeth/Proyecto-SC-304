@@ -4,9 +4,6 @@
  */
 package proyecto.sc.pkg304;
 
-import javax.swing.JOptionPane;
-import java.time.LocalDateTime;
-
 /**
  *
  * @author jgarr
