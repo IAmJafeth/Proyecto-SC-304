@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package proyecto.sc.pkg304;
+import java.time.Duration;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -104,6 +105,32 @@ public class AdministradorArchivo {
         } catch (IOException e) {
             System.out.println("Error al cargar el gestor de cajas.:" + e);
             return null;
+        }
+    }
+
+    public static void guardarTransaccion(Tiquete tiquete, Caja caja) {
+        try {
+            FileWriter file = new FileWriter("transacciones.txt", true);
+            PrintWriter writer = new PrintWriter(file);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            Duration tiempoEspera = Duration.between(tiquete.getHoraCreacion(), tiquete.getHoraAtencion());
+
+            writer.println("Cliente: " + tiquete.getNombre());
+            writer.println("ID: " + tiquete.getId());
+            writer.println("Edad: " + tiquete.getEdad());
+            writer.println("Tipo de tiquete: " + tiquete.getTipo());
+            writer.println("Trámite: " + tiquete.getTramite());
+            writer.println("Hora de creación: " + tiquete.getHoraCreacion().format(formatter));
+            writer.println("Hora de atención: " + tiquete.getHoraAtencion().format(formatter));
+            writer.println("Tiempo de espera: " + tiempoEspera.toMinutes() + " minutos, " +
+                    (tiempoEspera.toSeconds() % 60) + " segundos");
+            writer.println("Atendido en: " + caja.getNombre() + " (" + caja.getTipoCaja() + ")");
+            writer.println();
+
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error al guardar la transacción: " + e.getMessage());
         }
     }
 }

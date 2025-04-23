@@ -148,6 +148,8 @@ public class GestorCajas {
             tiqueteAtendido.setHoraAtencion(LocalDateTime.now());
             mensaje = "Se ha atendido a " + tiqueteAtendido.getNombre() + "\n" + tiqueteAtendido.getDetalles();
 
+            AdministradorArchivo.guardarTransaccion(tiqueteAtendido, cajaSeleccionada);
+
             try {
                 tiqueteSiguiente = cola.atiende();
                 cajaSeleccionada.setTiqueteActual(tiqueteSiguiente);

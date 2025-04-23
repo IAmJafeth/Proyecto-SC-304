@@ -79,7 +79,7 @@ public class InterfazUsuario {
 
     public void mostrarMenu() {
         while (true) {
-            String[] opciones = { "Agregar Tiquete", "Atender Tiquetes", "Mostrar Cajas", "Mostrar Cambio Dolar", "Salir" };
+            String[] opciones = { "Agregar Tiquete", "Atender Tiquetes", "Mostrar Cajas", "Mostrar Cambio Dolar","Generar Reporte", "Salir" };
             int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opción:", "Menú Principal",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
@@ -97,11 +97,19 @@ public class InterfazUsuario {
                     mostrarCambioDolar();
                     break;
                 case 4:
+                    generarReporte();
+                    break;
+                case 5:
                     return; // Salir
                 default:
                     JOptionPane.showMessageDialog(null, "Opción no válida.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void generarReporte(){
+        String reporte = AdministradorReportes.generarReporte();
+        JOptionPane.showMessageDialog(null, reporte, "Reporte de Transacciones", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void agregarTiquete() {
